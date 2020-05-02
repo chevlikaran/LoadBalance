@@ -1,0 +1,19 @@
+{
+  "name": "daproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chevlikaran/LoadBalance.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chevlikaran/LoadBalance/issues"
+  },
+  "homepage": "https://github.com/chevlikaran/LoadBalance#readme"
+}
