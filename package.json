@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/chevlikaran/LoadBalance/issues"
   },
-  "homepage": "https://github.com/chevlikaran/LoadBalance#readme"
+  "homepage": "https://github.com/chevlikaran/LoadBalance#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
