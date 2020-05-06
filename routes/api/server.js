@@ -17,25 +17,39 @@ app2.listen(port2, () => {
     console.log(`Server running at ${port2}`);
 });
 
-function myFunc(arg) {
-    console.log(`arg was => ${arg}`);
-    return;
-  }
+const app3 = express();
+const port3 = process.env.PORT || 3004;
+app3.use(body.json());
+app3.listen(port3, () => {
+    console.log(`Server running at ${port3}`);
+});
+
 
 app1.post('/', (req, res) => {
-    console.log("Inside slave");
+    console.log("Starting task at port 3002");
     setTimeout(function () {
-        console.log('After timeout 3002');
-        res.status(200).send('Response: Hello  3002');
+        console.log("Ending task at port 3002");
+        res.status(200).send('0');
     }, 5000);
     
 });
 
 app2.post('/', (req, res) => {
-    console.log("Inside slave");
-    setTimeout(myFunc, 6000, '3003');
-    console.log('After timeout 3003')
-    //res.status(200).send('Response: Hello  3003');
+    console.log("Starting task at port 3003");
+    setTimeout(function () {
+        console.log("Ending task at port 3003");
+        res.status(200).send('1');
+    }, 5000);
+    
+});
+
+app3.post('/', (req, res) => {
+    console.log("Starting task at port 3004");
+    setTimeout(function () {
+        console.log("Ending task at port 3004");
+        res.status(200).send('2');
+    }, 5000);
+    
 });
 
 

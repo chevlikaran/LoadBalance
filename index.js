@@ -20,7 +20,12 @@ app.set('view engine', 'ejs');
 //Testing the server
  app.get('/', (req, res) => {
      console.log('In here');
-     res.render('index');
+     res.render('index', {
+        server1: '0',
+        server2: '0',
+        server3: '0',
+        msg: ''
+    });
 });
 
 
