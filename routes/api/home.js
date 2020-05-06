@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-var querystring = require('querystring');
 var http = require('http');
 
 var server_no = -1;
@@ -12,15 +11,17 @@ router.post('/click', (req, res) => {
     final_no = server_no+3002;
     console.log(`Sending request at ${final_no}`)
     
-    var data = 'Data to be sent'
+    var data = JSON.stringify({
+        server_no: final_no
+      })
     var options = {
         host: 'localhost',
         port: final_no,
         path: '/',
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(data)
+            'Content-Type': 'application/json',
+            'Content-Length': data.length
         }
       };
     
@@ -29,9 +30,13 @@ router.post('/click', (req, res) => {
         // response.on('data', function (chunk) {
         //   console.log("body: " + chunk);
         // });
+        response.on('data', d => {
+            process.stdout.write(d)
+            console.log('respond received data')
+          });
         response.on('end', function() {
-          //res.send('ok');
-          console.log('respond received')
+          //
+          console.log('respond received end');
         })
       });
       
