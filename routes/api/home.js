@@ -17,15 +17,6 @@ router.post('/click', (req, res) => {
     serverCount[server_no]=serverCount[server_no]+1;
     final_no = server_no+3002;
     console.log(`Sending request at ${final_no}`)
-
-    
-        console.log('In here');
-        res.render('index', {
-           server1: serverCount[0],
-           server2: serverCount[1],
-           server3: serverCount[2],
-           msg: `Sending request to server at port : ${final_no}`
-       });
     
     var data = JSON.stringify({
         server_no: final_no
@@ -49,7 +40,9 @@ router.post('/click', (req, res) => {
             cur = 3002+numb;
             serverCount[numb]=serverCount[numb]-1;
             console.log(`Ending process at server port ${cur}`);
+            res.render('index');
           })
+
 
           response.on('end', () => {
            // myFun();
@@ -57,20 +50,11 @@ router.post('/click', (req, res) => {
         
          // console.log(response)
         });
-      
+        
       httpreq.write(data);
 
       
     httpreq.end();
-
-    function myFun(){
-        res.render('index', {
-            server1: serverCount[0],
-            server2: serverCount[1],
-            server3: serverCount[2],
-            msg: `Job done!!\nRequest to server at port : ${cur} complete`
-        });
-    }
 
 });
 
