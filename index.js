@@ -18,18 +18,14 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 //Testing the server
- app.get('/', (req, res) => {
-     console.log('Starting the application');
-     res.render('index');
+app.get('/', (req, res) => {
+	console.log('Starting the application');
+    res.render('index');
 });
-
-
-
 
 app.get('/access-denied-page', (req, res) => {
     res.render('access-denied-page');
 });
-
 
 
 //All routes
