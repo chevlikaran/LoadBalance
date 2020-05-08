@@ -3,8 +3,31 @@
         <title>Load Balance</title>
     </head>
     <body>
-        <form action="/api/home/click" method="POST">
-            <button type="submit">Request</button>
+        <form id="form" action="/api/home/add" method="POST">
+
+            <label for="A">Enter value of A</label>
+            <input type="text" name="a"></label>
+
+            <label for="B">Enter value of B</label>
+            <input type="text" name="b"></label>
+
+            <label for="function">Choose operation</label>
+            <select id="function" name="funct">
+                <option value="add">
+                    Add
+                </option>
+                <option value="sub">
+                    Sub
+                </option>
+                <option value="mult">
+                    Mult
+                </option>
+                <option value="div">
+                    Div
+                </option>
+            </select>
+
+            <input type="submit" value="submit"></input>
         </form>
     </body>
 </html>

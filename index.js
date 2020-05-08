@@ -27,7 +27,6 @@ app.get('/access-denied-page', (req, res) => {
     res.render('access-denied-page');
 });
 
-
 //All routes
 const ser = require('./routes/api/server');
 const home = require('./routes/api/home');
