@@ -1,7 +1,7 @@
 const body = require('body-parser');
 const express = require('express');
-
-var http = require('http');
+const ejs = require('ejs');
+const http = require('http');
 
 const router = express.Router();
 
@@ -26,216 +26,286 @@ app3.listen(port3, () => {
     console.log(`Server running at ${port3}`);
 });
 
-
-app1.post('/', (req, res) => {
-    // console.log("request received was : ", req);
-    // console.dir(req.headers.content, {depth : null});
-    // console.log("Contents are %j", req.headers.content);
-    // console.log("Printing type :- %d", req);
-
-    // console.log("Current Port no. is " + req.headers.content);
-    // console.log("Current function is " + req.headers.function);
-    // console.log(req.headers.a);
-    // console.log(req.headers.b);
-
-    if (req.headers.function == "add") {
-        res.status(200);
-        var addition = +(req.headers.a) + +(req.headers.b);
-        res.write(addition.toString());
-        res.write('0');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "sub") {
-        res.status(200);
-        var addition = +(req.headers.a) - +(req.headers.b);
-        res.write(addition.toString());
-        res.write('0');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "mult") {
-        res.status(200);
-        var addition = +(req.headers.a) * +(req.headers.b);
-        res.write(addition.toString());
-        res.write('0');
-        res.end();
-        return;
-    }
-
-    //fails if it's division
-
-    console.log("Starting task at port 3002");
-    console.log("There was an error encountered while processing request on this server");
-    console.log("The process will take place on new server");
-
+app1.set('view engine', 'ejs');
+app2.set('view engine', 'ejs');
+app3.set('view engine', 'ejs');
+//Making http request to ping main server in case of error
+function makeRequest(a,b,func,port,res){
+    const num = port-3002;
+    const nport = (num+1)%3+3002;
     var data = JSON.stringify({
-      server_no: 3003
-    });
-
+        'port': nport,
+        'a' : a,
+        'b' : b,
+        'function' : func,
+      });
+  
     var options = {
         host: 'localhost',
-        port: 3003,
+        port: nport,
         path: '/',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'content': 3003,
-            'a': req.headers.a,
-            'b': req.headers.b,
-            'function': req.headers.function,
             'Content-Length': data.length
         }
-    };
-
-    var caller = http.request(options, (response) => {
-      console.log("Request has been sent to server");
+      };
+  
+    var httpreq = http.request(options, (response) => {
       response.setEncoding('utf8');
-        var ans = "";
+      console.log("The response status code is : " + response.statusCode);
+  
+      if (response.statusCode == 200) {
         response.on('data', d => {
-            // console.log("####### SERVER SERVER SERVER SERVER SERVER SERVER" + d);
-            numb = parseInt(d, 10);
-            if (ans == "") {
-                ans = d;
-            }
-            else {
-                // console.log("$$$$$$$ SERVER SERVER SERVER SERVER SERVER SERVER" + numb);
-                cur = 3002 + numb;
-                console.log(`Ending process at server port ${cur}`);
-            }
+            console.log('\n');
+            console.log('--------------');
+            console.log(`Re-request response ${port}(error) --> ${nport} (resolved)`);
+            console.log('Answer: '+d);
+            console.log('Ending process at resolution server port');
+            res.status(404);
+            res.end();
         });
-
-
+  
         response.on('end', () => {
-            if ((ans == "Division Operation Failed") || (ans == "Sever Failed")) {
-                console.log(ans);
-            }
-            else {
-                console.log("The answer for the operations performed is " + ans);
-            }
+          
         });
-
-        // response.on('data', d => {
-        //   numb = parseInt(d, 10);
-        //   cur = 3002 + numb;
-        //   console.log(`Ending process at server port ${cur}`);
-        // });
-
-        // response.on('end', () => {
-        // });
-
+      
+      }else{
+        console.log('There was an unexpected failure. Request processed at another server');
+      }
     });
-    caller.write(data);
-    caller.end();
+  
+      httpreq.write(data);
+      httpreq.end();
 
-    res.statusMessage = "The request on port 3002 failed!!";
-    res.status(404);
-    res.write("Server Failed");
-    res.write('1');
-//ends the request made
+}
+
+function add(a,b,res,port) {
+    setTimeout(function () {
+        addition = +a + +b;
+        res.write('Port : '+port.toString()+' --> '+a.toString()+' + '+b.toString()+' = '+addition.toString());
+        res.status(200);
+        res.end();
+        return;
+    }, 5000);
+}
+
+
+function sub(a,b,res,port){
+    setTimeout(function () {
+        subtraction = +a - +b;
+        res.write('Port : '+port.toString()+' --> '+a.toString()+' - '+b.toString()+' = '+subtraction.toString());
+        res.status(200);
+        res.end();
+        return;
+    }, 5000);
+}
+
+function mul(a,b,res,port){
+    setTimeout(function () {
+        multiplication = +a * +b;
+        res.write('Port : '+port.toString()+' --> '+a.toString()+' * '+b.toString()+' = '+multiplication.toString());
+        res.status(200);
+        res.end();
+        return;
+    }, 5000);
+}
+
+function div(a,b,res,port){
+    setTimeout(function () {
+        division = +a / +b;
+        res.write('Port : '+port.toString()+' --> '+a.toString()+' / '+b.toString()+' = '+division.toString());
+        res.status(200);
+        res.end();
+        return;
+    }, 5000);
+}
+
+app1.post('/', (req, res) => {
+    if (req.body.function == "add") {
+        console.log('Starting Addition at port 3002');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            add(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3002... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }
+    else if (req.body.function == "sub") {
+        console.log('Starting Substraction at port 3002');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            sub(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3002... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if (req.body.function == "mult") {
+        console.log('Starting Multiplication at port 3002');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            mul(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3002... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if(req.body.function == "div"){
+        console.log('Starting Division at port 3002');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            if(parseInt(b1, 10)==0){
+                res.write('Port : '+portz.toString()+' --> Cannot be divided by zero');
+                res.status(200);
+                res.end();
+            }else{
+                div(a1,b1,res,portz);
+            }
+        }catch(e){
+            console.log('Error: '+e+' on port 3002... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }
 });
 
 app2.post('/', (req, res) => {
-    console.log("Starting task at port 3003");
-
-    // console.log("Current Port no. is " + req.headers.content);
-    // console.log("Current function is " + req.headers.function);
-    // console.log(req.headers.a);
-    // console.log(req.headers.b);
-
-    if (req.headers.function == "add") {
-        res.status(200);
-        var addition = +(req.headers.a) + +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('1');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "sub") {
-        res.status(200);
-        var addition = +(req.headers.a) - +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('1');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "mult") {
-        res.status(200);
-        var addition = +(req.headers.a) * +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('1');
-        res.end();
-        return;
-    }
-    else{
-        res.status(200);
-        if (req.headers.b == 0) {
-            res.write("Division Operation Failed");
-            res.write('1');
-            res.end();
-            return;
+    if (req.body.function == "add") {
+        console.log('Starting Addition at port 3003');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            add(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3003... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
         }
-        var addition = +(req.headers.a) / +(req.headers.b);
-        res.write(addition.toString());
-        res.write('1');
-        res.end();
+        return;
+    }
+    else if (req.body.function == "sub") {
+        console.log('Starting Substraction at port 3003');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            sub(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3003... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if (req.body.function == "mult") {
+        console.log('Starting Multiplication at port 3003');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            mul(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3003... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if(req.body.function == "div"){
+        console.log('Starting Division at port 3003');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            if(parseInt(b1, 10)==0){
+                throw new Error('Something Unexpected');
+            }else{
+                div(a1,b1,res,portz);
+            }
+        }catch(e){
+            console.log('Error: '+e+' on port 3003... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
         return;
     }
 });
 
 app3.post('/', (req, res) => {
-    console.log("Starting task at port 3004");
-
-    // console.log("Current Port no. is " + req.headers.content);
-    // console.log("Current function is " + req.headers.function);
-    // console.log(req.headers.a);
-    // console.log(req.headers.b);
-
-    if (req.headers.function == "add") {
-        res.status(200);
-        var addition = +(req.headers.a) + +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('2');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "sub") {
-        res.status(200);
-        var addition = +(req.headers.a) - +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('2');
-        res.end();
-        return;
-    }
-    else if (req.headers.function == "mult") {
-        res.status(200);
-        var addition = +(req.headers.a) * +(req.headers.b);
-        // console.log("################################" + addition);
-        res.write(addition.toString());
-        res.write('2');
-        res.end();
-        return;
-    }
-    else {
-        res.status(200);
-        if (req.headers.b == 0) {
-            res.write("Division Operation Failed");
-            res.write('2');
-            res.end();
-            return;
+    if (req.body.function == "add") {
+        console.log('Starting Addition at port 3004');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            add(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3004... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
         }
-        var addition = +(req.headers.a) / +(req.headers.b);
-        res.write(addition.toString());
-        res.write('2');
-        res.end();
+        return;
+    }
+    else if (req.body.function == "sub") {
+        console.log('Starting Substraction at port 3004');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            sub(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3004... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if (req.body.function == "mult") {
+        console.log('Starting Multiplication at port 3004');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            mul(a1,b1,res,portz);
+        }catch(e){
+            console.log('Error: '+e+' on port 3004... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
+        return;
+    }else if(req.body.function == "div"){
+        console.log('Starting Division at port 3004');
+        try{
+            var a1 = req.body.a;
+            var b1 = req.body.b;
+            var funct1 = req.body.function;
+            var portz = req.body.port;
+            if(parseInt(b1, 10)==0){
+                res.write('Port : '+portz.toString()+' --> Cannot be divided by zero');
+                res.status(200);
+                res.end();
+            }else{
+                div(a1,b1,res,portz);
+            }
+        }catch(e){
+            console.log('Error: '+e+' on port 3004... Redirecting request...');
+            makeRequest(a1,b1,funct1,portz,res);
+        }
         return;
     }
 });
-
 
 module.exports = router;

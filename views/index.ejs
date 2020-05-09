@@ -3,27 +3,29 @@
         <title>Load Balance</title>
     </head>
     <body>
-        <form id="form" action="/api/home/add" method="POST">
+        <form id="form" action="/api/home/" method="POST">
 
             <label for="A">Enter value of A</label>
-            <input type="text" name="a"></label>
+            <input type="text" name="a" value="3"></label>
 
             <label for="B">Enter value of B</label>
-            <input type="text" name="b"></label>
+            <input type="text" name="b" value="0"></label>
+
+            <input type="text" name="port" value="client" hidden></label>
 
             <label for="function">Choose operation</label>
-            <select id="function" name="funct">
+            <select id="function" name="function">
                 <option value="add">
-                    Add
+                    Addition
                 </option>
                 <option value="sub">
-                    Sub
+                    Subtraction
                 </option>
                 <option value="mult">
-                    Mult
+                    Multiplication
                 </option>
                 <option value="div">
-                    Div
+                    Division
                 </option>
             </select>
 
