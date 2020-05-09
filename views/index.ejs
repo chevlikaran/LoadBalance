@@ -9,27 +9,61 @@
     </head>
     <body>
         <div class="container-fluid">
-            <form id="form" action="/api/home/" method="POST">
-                <div class="form-group">
-                    <label for="numberA">A Value:</label>
-                    <input type="number" name="a" value="3" class="form-control"></label>
+            <div class="row content">
+                <div class="col-sm-3 sidenav" style="background-color: aliceblue;height:100%;">
+                    <h2 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Load Balancing</h2>
+                    <div class="list-group">
+                        <a class="list-group-item">
+                          <h4 class="list-group-item-heading">Question 1</h4>
+                          <p class="list-group-item-text">Request will be directed to 3 servers in a round robbin fashion</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Question 2</h4>
+                            <p class="list-group-item-text">In case of fault request will be directed to another server</p>
+                        </a>
+                    </div>
+                    <h3 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Extra Information</h3>
+                    <div class="list-group">
+                        <a class="list-group-item">
+                          <h4 class="list-group-item-heading">Servers</h4>
+                          <p class="list-group-item-text">Master server    : 3001</p>
+                          <p class="list-group-item-text">Worker servers: 3002, 3003, 3004</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Unhandeled error</h4>
+                            <p class="list-group-item-text">Division by 0 at server 3003</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Timeout</h4>
+                            <p class="list-group-item-text">Each server will take atleast 5 sec to complete job</p>
+                        </a>
+                    </div>
+                    <hr>
+                    
                 </div>
-                <div class="form-group">
-                    <label for="numberB">B Value:</label>
-                    <input type="number" name="b" value="5" class="form-control"></label>
-                </div>
-                <input type="text" name="port" value="client" hidden></label>
-                <div class="form-group">
-                    <label for="function">Select Operation</label>
-                    <select class="form-control" id="function" name="function">
-                      <option value="add">Addition</option>
-                      <option value="sub">Subtraction</option>
-                      <option value="mult">Multiplication</option>
-                      <option value="div">Division</option>
-                    </select>
-                </div>
-                <button type="submit" value="submit" class="btn btn-primary">Submit Request</button>
-            </form>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-6" style="margin-top: 5em;">
+                    <form id="form" action="/api/home/" method="POST">
+                        <div class="form-group">
+                            <label for="numberA">A Value:</label>
+                            <input type="number" name="a" value="3" class="form-control"></label>
+                        </div>
+                        <div class="form-group">
+                            <label for="numberB">B Value:</label>
+                            <input type="number" name="b" value="5" class="form-control"></label>
+                        </div>
+                        <input type="text" name="port" value="client" hidden></label>
+                        <div class="form-group">
+                            <label for="function">Select Operation</label>
+                            <select class="form-control" id="function" name="function">
+                                <option value="add">Addition</option>
+                                <option value="sub">Subtraction</option>
+                                <option value="mult">Multiplication</option>
+                                <option value="div">Division</option>
+                            </select>
+                        </div>
+                        <button type="submit" value="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
         </div>
     </body>
 </html>
