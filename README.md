@@ -55,7 +55,7 @@ Follow the following steps to use the app :
 ![User Interface](images/ui.png)
 
 #### Load Balancing
-Normal processing of request on server 3002
+Normal processing of request on server 3002             
 ![Console](images/console.png)
 
 #### Fault Tolerance
