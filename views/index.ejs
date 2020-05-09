@@ -10,37 +10,6 @@
     <body>
         <div class="container-fluid">
             <div class="row content">
-                <div class="col-sm-3 sidenav" style="background-color: aliceblue;height:100%;">
-                    <h2 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Load Balancing</h2>
-                    <div class="list-group">
-                        <a class="list-group-item">
-                          <h4 class="list-group-item-heading">Question 1</h4>
-                          <p class="list-group-item-text">Request will be directed to 3 servers in a round robbin fashion</p>
-                        </a>
-                        <a class="list-group-item">
-                            <h4 class="list-group-item-heading">Question 2</h4>
-                            <p class="list-group-item-text">In case of fault request will be directed to another server</p>
-                        </a>
-                    </div>
-                    <h3 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Extra Information</h3>
-                    <div class="list-group">
-                        <a class="list-group-item">
-                          <h4 class="list-group-item-heading">Servers</h4>
-                          <p class="list-group-item-text">Master server    : 3001</p>
-                          <p class="list-group-item-text">Worker servers: 3002, 3003, 3004</p>
-                        </a>
-                        <a class="list-group-item">
-                            <h4 class="list-group-item-heading">Unhandeled error</h4>
-                            <p class="list-group-item-text">Division by 0 at server 3003</p>
-                        </a>
-                        <a class="list-group-item">
-                            <h4 class="list-group-item-heading">Timeout</h4>
-                            <p class="list-group-item-text">Each server will take atleast 5 sec to complete job</p>
-                        </a>
-                    </div>
-                    <hr>
-                    
-                </div>
                 <div class="col-sm-1"></div>
                 <div class="col-sm-6" style="margin-top: 5em;">
                     <form id="form" action="/api/home/" method="POST">
@@ -64,6 +33,41 @@
                         </div>
                         <button type="submit" value="submit" class="btn btn-primary">Submit Request</button>
                     </form>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-3" style="background-color: aliceblue;height:100%;">
+                    <h2 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Load Balancing</h2>
+                    <div class="list-group">
+                        <a class="list-group-item">
+                          <h4 class="list-group-item-heading">Question 1</h4>
+                          <p class="list-group-item-text">Request will be directed to 3 servers in a round robbin fashion</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Question 2</h4>
+                            <p class="list-group-item-text">In case of fault request will be directed to another server</p>
+                        </a>
+                    </div>
+                    <hr>
+                    <hr>
+                    <h3 style="color: brown;font-family:Georgia, 'Times New Roman', Times, serif;margin-top: 1em;">Extra Information</h3>
+                    <div class="list-group">
+                        <a class="list-group-item">
+                          <h4 class="list-group-item-heading">Servers</h4>
+                          <p class="list-group-item-text">Master server    : 3001</p>
+                          <p class="list-group-item-text">Worker servers: 3002, 3003, 3004</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Unhandeled error</h4>
+                            <p class="list-group-item-text">Division by 0 at server 3003</p>
+                        </a>
+                        <a class="list-group-item">
+                            <h4 class="list-group-item-heading">Timeout</h4>
+                            <p class="list-group-item-text">Each server will take atleast 5 sec to complete job</p>
+                        </a>
+                    </div>
+                    <hr>
+                    
+                </div>
         </div>
     </body>
 </html>
