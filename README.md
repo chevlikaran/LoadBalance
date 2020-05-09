@@ -49,6 +49,19 @@ Follow the following steps to use the app :
    - Select the Division function
    - Request will throw a 404 error and will further be handled by the subsequent server
 
+### Screen shots
+
+#### User Interface  
+![User Interface](images/ui.png)
+
+#### Load Balancing
+Normal processing of request on server 3002
+![Console](images/console.png)
+
+#### Fault Tolerance
+Fault occured at 3003 and reuqest reinitiated at 3004
+![Error](images/error.png)
+
 ### Built With
 
 * HTML
