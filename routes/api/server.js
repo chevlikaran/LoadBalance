@@ -29,12 +29,8 @@ app3.listen(port3, () => {
 app1.set('view engine', 'ejs');
 app2.set('view engine', 'ejs');
 app3.set('view engine', 'ejs');
-
 //Making http request to ping main server in case of error
-var flag = 0;
 function makeRequest(a,b,func,port,res){
-    if(flag==0){
-        flag=1;
     const num = port-3002;
     const nport = (num+1)%3+3002;
     var data = JSON.stringify({
@@ -81,7 +77,7 @@ function makeRequest(a,b,func,port,res){
   
       httpreq.write(data);
       httpreq.end();
-    }
+
 }
 
 function add(a,b,res,port) {
@@ -173,13 +169,10 @@ app1.post('/', (req, res) => {
             var b1 = req.body.b;
             var funct1 = req.body.function;
             var portz = req.body.port;
-            if(parseInt(b1, 10)==0&&flag==1){
+            if(parseInt(b1, 10)==0){
                 res.write('Port : '+portz.toString()+' --> Cannot be divided by zero');
                 res.status(200);
                 res.end();
-                flag=0;
-            }else if(parseInt(b1, 10)==0&&flag==0){
-                throw new Error('Something Unexpected');
             }else{
                 div(a1,b1,res,portz);
             }
@@ -239,12 +232,7 @@ app2.post('/', (req, res) => {
             var b1 = req.body.b;
             var funct1 = req.body.function;
             var portz = req.body.port;
-            if(parseInt(b1, 10)==0&&flag==1){
-                res.write('Port : '+portz.toString()+' --> Cannot be divided by zero');
-                res.status(200);
-                res.end();
-                flag=0;
-            }else if(parseInt(b1, 10)==0&&flag==0){
+            if(parseInt(b1, 10)==0){
                 throw new Error('Something Unexpected');
             }else{
                 div(a1,b1,res,portz);
@@ -305,13 +293,10 @@ app3.post('/', (req, res) => {
             var b1 = req.body.b;
             var funct1 = req.body.function;
             var portz = req.body.port;
-            if(parseInt(b1, 10)==0&&flag==1){
+            if(parseInt(b1, 10)==0){
                 res.write('Port : '+portz.toString()+' --> Cannot be divided by zero');
                 res.status(200);
                 res.end();
-                flag=0;
-            }else if(parseInt(b1, 10)==0&&flag==0){
-                throw new Error('Something Unexpected');
             }else{
                 div(a1,b1,res,portz);
             }
